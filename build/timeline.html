@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Timeline Panel</title>
+  <!-- Import fonts to match main site typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #3B3B3B; /* Match panel background */
+      font-family: 'Source Sans Pro', sans-serif;
+      color: #e0e0e0;
+    }
+    /* Timeline container styled like Blender’s timeline editor */
+    .timeline {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background-color: #3B3B3B;
+      overflow: hidden;
+      /* Vertical stripes every 50px for frame markers */
+      background-image: linear-gradient(to right, #555 1px, transparent 1px);
+      background-size: 50px 100%;
+    }
+    /* Scrub-bar (playhead) */
+    .scrub-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #F2F2F2;
+      pointer-events: none;
+    }
+    /* Keyframe markers (each is a link with a diamond and label) */
+    .keyframe {
+      position: absolute;
+      top: 15px;
+      transform: translateX(-50%);
+      text-decoration: none;
+    }
+    /* Diamond shape for keyframe indicator */
+    .diamond {
+      width: 10px;
+      height: 10px;
+      background-color: #FF5C00;
+      display: block;
+      transform: rotate(45deg);
+      transition: background-color 0.3s;
+    }
+    .keyframe:hover .diamond {
+      background-color: #FFA500;
+    }
+    /* Always-visible keyframe label */
+    .keyframe-label {
+      position: absolute;
+      top: 20px;  /* position label below the diamond */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #FFF;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.8rem;
+      white-space: nowrap;  /* prevent text wrapping */
+      transition: font-size 0.3s;
+    }
+    .keyframe:hover .keyframe-label {
+      font-size: 1rem;  /* enlarge text on hover for emphasis */
+    }
+  </style>
+</head>
+<body>
+  <section class="timeline">
+    <div class="scrub-bar"></div>
+    <!-- Example keyframes (links) with always-visible labels -->
+    <a href="project1.html" class="keyframe" style="left: 10%;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 1 Info</span>
+    </a>
+    <a href="project2.html" class="keyframe" style="left: 50%;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 2 Info</span>
+    </a>
+    <a href="project3.html" class="keyframe" style="left: 90%;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 3 Info</span>
+    </a>
+  </section>
+  <script>
+    // Animate the scrub-bar to follow the mouse position over the timeline
+    const timeline = document.querySelector('.timeline');
+    const scrubBar = document.querySelector('.scrub-bar');
+    timeline.addEventListener('mousemove', (e) => {
+      const rect = timeline.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      scrubBar.style.left = offsetX + 'px';
+    });
+    // Hide or reset the scrub-bar when the cursor leaves the timeline area
+    timeline.addEventListener('mouseleave', () => {
+      scrubBar.style.left = '-2px';  /* Move it just off-screen (left) */
+    });
+  </script>
+</body>
+</html>

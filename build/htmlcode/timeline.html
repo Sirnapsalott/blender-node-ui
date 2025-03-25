@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blender-Like Timeline with Always Visible Text</title>
+  <style>
+    /* --- Timeline Container --- */
+    .timeline {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background-color: #2C2C2C; /* Dark background to mimic Blender */
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+
+    /* --- Scrub Bar --- */
+    .scrub-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #F2F2F2;
+      pointer-events: none; /* So it doesn't block clicks */
+    }
+
+    /* 
+      Each keyframe is an <a> with:
+      1) A diamond shape
+      2) Always-visible text
+      3) Larger text on hover
+    */
+    .keyframe {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-decoration: none; /* Remove default underline */
+    }
+
+    /* Diamond shape for the keyframe "dot" */
+    .diamond {
+      width: 10px;
+      height: 10px;
+      background-color: #FF5C00; /* Bright orange */
+      display: block;
+      transform: rotate(45deg);
+      transition: background-color 0.3s;
+    }
+    .keyframe:hover .diamond {
+      background-color: #FFA500; /* Slightly lighter on hover */
+    }
+
+    /* Label that is always visible */
+    .keyframe-label {
+      position: absolute;
+      top: 20px; /* Moves the label below the diamond */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #FFF;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      transition: font-size 0.3s;
+      white-space: nowrap; /* Prevents text wrap */
+      /* If you want it semi-transparent by default, you can add: opacity: 0.9; */
+    }
+    .keyframe:hover .keyframe-label {
+      font-size: 1rem; /* Increase font size on hover */
+    }
+  </style>
+</head>
+<body>
+
+  <section class="timeline">
+    <div class="scrub-bar"></div>
+
+    <!-- Example keyframes (links) with always-visible labels -->
+    <a href="project1.html" class="keyframe" style="left: 50px;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 1 Info</span>
+    </a>
+
+    <a href="project2.html" class="keyframe" style="left: 150px;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 2 Info</span>
+    </a>
+
+    <a href="project3.html" class="keyframe" style="left: 250px;">
+      <span class="diamond"></span>
+      <span class="keyframe-label">Project 3 Info</span>
+    </a>
+  </section>
+
+  <script>
+    // Move the scrub bar horizontally based on mouse position
+    const timeline = document.querySelector('.timeline');
+    const scrubBar = document.querySelector('.scrub-bar');
+
+    timeline.addEventListener('mousemove', (e) => {
+      const rect = timeline.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left; // Distance from left edge of timeline
+      scrubBar.style.left = offsetX + 'px';
+    });
+
+    // Optional: hide the scrub bar when leaving the timeline
+    timeline.addEventListener('mouseleave', () => {
+      scrubBar.style.left = '-2px'; // Move it just out of view, or set display: none
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+/* Reset some basic defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Overall page styling - dark and clean */
+  body {
+    font-family: "Inter", sans-serif;
+    background-color: #1e1e1e; /* dark, similar to 3D software UI */
+    color: #e0e0e0;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Top bar header */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2c2c2c;
+    padding: 1rem 2rem;
+  }
+  
+  .logo-area .site-title {
+    font-size: 1.5rem;
+    color: #f2f2f2;
+  }
+  
+  /* Navigation placeholder */
+  .main-nav {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .hero-text {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    color: #f2f2f2;
+  }
+  
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #444;
+    border-radius: 6px;
+    /* This border mimics a minimal "viewport" frame */
+  }
+  
+  /* Texture Nodes Section */
+  .texture-nodes {
+    background-color: #2c2c2c;
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: 6px;
+  }
+  
+  .texture-nodes h3 {
+    margin-bottom: 1.5rem;
+    color: #f2f2f2;
+  }
+  
+  .nodes-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .node {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #3a3a3a;
+    text-decoration: none;
+    color: #f2f2f2;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .node:hover {
+    background-color: #505050;
+    border-color: #666;
+  }
+  
+  /* Footer */
+  .footer {
+    margin-top: auto; /* pushes footer to bottom if content is short */
+    text-align: center;
+    padding: 1rem;
+    background-color: #2c2c2c;
+  }
+
+  /* Timeline Section Container */
+.timeline-section {
+  padding: 2rem;
+  margin: 2rem;
+  background-color: #2c2c2c; /* Match your site's dark palette */
+  border-radius: 6px;
+}
+
+/* Section Heading */
+.timeline-heading {
+  margin-bottom: 1.5rem;
+  color: #f2f2f2;
+  text-align: center;
+}
+
+/* Outer container for horizontal scrolling */
+.timeline-container {
+  display: flex;
+  gap: 2rem;                /* Space between timeline items */
+  overflow-x: auto;         /* Horizontal scroll if items overflow */
+  scroll-behavior: smooth;  /* Smooth scrolling on wheel or trackpad */
+  padding-bottom: 1rem;     /* Extra space so content doesn't clip */
+}
+
+/* Each timeline item */
+.timeline-item {
+  flex-shrink: 0;      /* Prevent items from shrinking */
+  min-width: 200px;    /* Adjust min-width to your preference */
+  position: relative;
+}
+
+/* The "keyframe" wrapper to align dot + content */
+.keyframe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* The dot representing a keyframe */
+.dot {
+  width: 20px;
+  height: 20px;
+  background-color: #f2f2f2;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* Content bubble for each keyframe */
+.keyframe-content {
+  background-color: #3a3a3a;
+  padding: 1rem;
+  border-radius: 6px;
+  color: #e0e0e0;
+  max-width: 300px; /* Adjust as needed */
+  text-align: center;
+}
+
+/* Headings inside each keyframe content */
+.keyframe-content h3 {
+  margin-bottom: 0.5rem;
+  color: #f2f2f2;
+}

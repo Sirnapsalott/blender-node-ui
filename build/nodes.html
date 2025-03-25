@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blender Node Graph Example</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #222;
+      font-family: sans-serif;
+      color: #fff;
+    }
+    .node-graph-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+    }
+    .node {
+      position: absolute;
+      background-color: #333;
+      border: 1px solid #666;
+      border-radius: 5px;
+      width: 180px;
+      padding-bottom: 0.5rem;
+      cursor: grab; /* show draggable cursor */
+    }
+    .node-header {
+      padding: 0.5rem;
+      font-weight: bold;
+      border-bottom: 1px solid #666;
+    }
+    .node-content {
+      padding: 0.5rem;
+    }
+    .connections {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none; /* let clicks pass through to nodes */
+      width: 100%;
+      height: 100%;
+    }
+    .connection-path {
+      stroke: #88f;
+      stroke-width: 2;
+      fill: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="node-graph-container">
+    <!-- Node 1 -->
+    <div class="node" id="node1" style="top: 50px; left: 50px;">
+      <div class="node-header" style="background-color: #1abc9c;">Group Input</div>
+      <div class="node-content">
+        Geometry <br> Factor
+      </div>
+    </div>
+
+    <!-- Node 2 -->
+    <div class="node" id="node2" style="top: 50px; left: 350px;">
+      <div class="node-header" style="background-color: #3498db;">Random Value</div>
+      <div class="node-content">
+        Value <br> Boolean <br> Probability <br> ID <br> Seed
+      </div>
+    </div>
+
+    <!-- Node 3 -->
+    <div class="node" id="node3" style="top: 200px; left: 350px;">
+      <div class="node-header" style="background-color: #e74c3c;">Selection</div>
+      <div class="node-content">
+        Selection
+      </div>
+    </div>
+
+    <!-- Node 4 -->
+    <div class="node" id="node4" style="top: 125px; left: 600px;" onclick="window.top.location.href='3Dgeneral.html'">
+      <div class="node-header" style="background-color: #f39c12;">And</div>
+      <div class="node-content">
+        (Combines signals)
+      </div>
+    </div>
+
+    <!-- SVG for connections -->
+    <svg class="connections">
+      <path id="path1" class="connection-path" />
+      <path id="path2" class="connection-path" />
+      <path id="path3" class="connection-path" />
+      <path id="path4" class="connection-path" />
+    </svg>
+  </div>
+
+  <script>
+    // Helper functions to get left/right center points of a node
+    function getRightCenter(el) {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width,
+        y: rect.top + rect.height / 2
+      };
+    }
+
+    function getLeftCenter(el) {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left,
+        y: rect.top + rect.height / 2
+      };
+    }
+
+    // Cubic Bezier path generator
+    function createCurvePath(start, end) {
+      const dx = (end.x - start.x) / 2;
+      return `M ${start.x},${start.y}
+              C ${start.x + dx},${start.y}
+                ${end.x - dx},${end.y}
+                ${end.x},${end.y}`;
+    }
+
+    // Update paths whenever a node moves or the window changes
+    function updatePaths() {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+
+      // Node references
+      const node1 = document.getElementById('node1');
+      const node2 = document.getElementById('node2');
+      const node3 = document.getElementById('node3');
+      const node4 = document.getElementById('node4');
+
+      // 1) Group Input -> Random Value
+      const p1Start = getRightCenter(node1);
+      const p1End = getLeftCenter(node2);
+      p1Start.x += scrollX; p1Start.y += scrollY;
+      p1End.x += scrollX;   p1End.y += scrollY;
+      document.getElementById('path1').setAttribute('d', createCurvePath(p1Start, p1End));
+
+      // 2) Group Input -> Selection
+      const p2Start = getRightCenter(node1);
+      const p2End = getLeftCenter(node3);
+      p2Start.x += scrollX; p2Start.y += scrollY;
+      p2End.x += scrollX;   p2End.y += scrollY;
+      document.getElementById('path2').setAttribute('d', createCurvePath(p2Start, p2End));
+
+      // 3) Random Value -> And
+      const p3Start = getRightCenter(node2);
+      const p3End = getLeftCenter(node4);
+      p3Start.x += scrollX; p3Start.y += scrollY;
+      p3End.x += scrollX;   p3End.y += scrollY;
+      document.getElementById('path3').setAttribute('d', createCurvePath(p3Start, p3End));
+
+      // 4) Selection -> And
+      const p4Start = getRightCenter(node3);
+      const p4End = getLeftCenter(node4);
+      p4Start.x += scrollX; p4Start.y += scrollY;
+      p4End.x += scrollX;   p4End.y += scrollY;
+      document.getElementById('path4').setAttribute('d', createCurvePath(p4Start, p4End));
+    }
+
+    // Add drag-and-drop functionality for each node
+    const nodes = document.querySelectorAll('.node');
+    let isDragging = false;
+    let currentNode = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    nodes.forEach(node => {
+      node.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        currentNode = node;
+        offsetX = e.clientX - node.offsetLeft;
+        offsetY = e.clientY - node.offsetTop;
+        node.style.cursor = 'grabbing';
+      });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging || !currentNode) return;
+      currentNode.style.left = (e.clientX - offsetX) + 'px';
+      currentNode.style.top = (e.clientY - offsetY) + 'px';
+      updatePaths(); // update the connections in real-time
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (currentNode) {
+        currentNode.style.cursor = 'grab';
+      }
+      isDragging = false;
+      currentNode = null;
+    });
+
+    // Recalculate paths on load, resize, and scroll
+    window.addEventListener('load', updatePaths);
+    window.addEventListener('resize', updatePaths);
+    window.addEventListener('scroll', updatePaths);
+  </script>
+</body>
+</html>
